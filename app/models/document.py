@@ -11,5 +11,6 @@ class Document(Base):
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
     document_type = Column(String, nullable=False)
     document_url = Column(String, nullable=False)
+    status = Column(String, nullable=False, default="pending")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

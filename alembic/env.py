@@ -16,6 +16,7 @@ config = context.config
 from app.config import settings
 from app.database import Base
 from app.models.company import Company
+from app.models import document
 
 # Pasa la cadena de conexión a la base de datos desde la configuración a Alembic
 config.set_main_option("sqlalchemy.url", settings.database_url)
