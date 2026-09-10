@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from app.database import Base
@@ -14,3 +14,4 @@ class Company(Base):
     phone = Column(String, nullable=False)
     email = Column(String, nullable=False)
     verification_status = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
