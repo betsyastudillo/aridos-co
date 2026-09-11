@@ -8,6 +8,7 @@ class MaterialBase(BaseModel):
     description: Optional[str]
     category: str
     price: Decimal # Decimal no Float para que coincida con el Numeric
+    tax_rate: Decimal = Decimal("0.19") # Decimal no Float para que coincida con el Numeric
 
 
 class MaterialCreate(MaterialBase):

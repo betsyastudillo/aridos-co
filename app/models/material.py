@@ -11,4 +11,5 @@ class Material(Base):
     description = Column(String, nullable=True)
     category = Column(String, nullable=True)
     price = Column(Numeric(10, 2), nullable=False) # Se usa Numeric porque no tiene errores de redondeo como Float
+    tax_rate = Column(Numeric(5, 4), nullable=False, default=0.19) # 19% IVA pero editable
     is_active = Column(Boolean, nullable=False, default=True)
