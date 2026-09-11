@@ -13,6 +13,14 @@ def get_documents_by_company(db: Session, company_id: UUID) -> list[Document]:
     return db.query(Document).filter(Document.company_id == company_id).all()
 
 
+def get_documents_by_vehicle(db: Session, vehicle_id: UUID) -> list[Document]:
+    return db.query(Document).filter(Document.vehicle_id == vehicle_id).all()
+
+
+def get_documents_by_carrier(db: Session, carrier_id: UUID) -> list[Document]:
+    return db.query(Document).filter(Document.carrier_id == carrier_id).all()
+
+
 def save_document_file(file: UploadFile, company_id: UUID) -> str:
     company_folder = os.path.join(UPLOAD_DIR, str(company_id))
     os.makedirs(company_folder, exist_ok=True)
@@ -29,11 +37,28 @@ def save_document_file(file: UploadFile, company_id: UUID) -> str:
     return relative_url
 
 
-def create_document(db: Session, company_id: UUID, document_type: str, file: UploadFile) -> Document:
-    file_path = save_document_file(file, company_id)
+def create_document(
+        db: Session, 
+        document_type: str, 
+        file: UploadFile,
+        company_id: Optional[UUID] = None, 
+        vehicle_id: Optional[UUID] = None, 
+        carrier_id: Optional[UUID] = None, 
+    ) -> Document:
+
+    owners = [company_id, vehicle_id, carrier_id]
+
+    # Garatiza que suban de a 1 solamente
+    if sum(o is not None for o in owners) != 1:
+        raise ValueError("Document must belong to exactly one owner (company, vehicle, carrier)")
+    
+    owner_id = company_id or vehicle_id or carrier_id
+    file_path = save_document_file(file, owner_id)
 
     new_document = Document(
         company_id=company_id,
+        vehicle_id=vehicle_id,
+        carrier_id=carrier_id,
         document_type=document_type,
         document_url=file_path,
         status="pending"

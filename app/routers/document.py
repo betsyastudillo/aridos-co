@@ -22,7 +22,7 @@ def upload_document(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-    return create_document(db, company_id, document_type, file)
+    return create_document(db, document_type, file, company_id=company_id)
 
 
 @router.patch("/{company_id}/documents/{document_id}/status", response_model=DocumentBase)

@@ -1,0 +1,16 @@
+from sqlalchemy import Column, String, Date, Boolean
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
+from app.database import Base
+
+
+class Carrier(Base):
+    __tablename__ = "carriers"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    full_name = Column(String(100), nullable=False)
+    document_id = Column(String(100), nullable=False)
+    phone = Column(String(15), nullable=False)
+    address = Column(String(200), nullable=False)
+    license_expiration_date = Column(Date, nullable=False)
+    is_active = Column(Boolean, default=True)
