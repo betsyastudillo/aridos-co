@@ -16,3 +16,4 @@ class OrderItem(Base):
     subtotal = Column(Numeric(12, 2), nullable=False)
 
     order = relationship("Order", back_populates="items")
+    material = relationship("Material")

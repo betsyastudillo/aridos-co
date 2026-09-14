@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from app.routers import company, document, auth, user, material, order, vehicle, carrier, assignment, payment
+from app.routers import company, document, auth, user, material, order, vehicle, carrier, assignment, payment, dispatch_guide
 
 app = FastAPI(title="AridosCo API")
 
@@ -15,6 +15,7 @@ app.include_router(vehicle.router)
 app.include_router(carrier.router)
 app.include_router(assignment.router)
 app.include_router(payment.router)
+app.include_router(dispatch_guide.router)
 
 @app.get("/")
 def root():
