@@ -10,6 +10,7 @@ class Order(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     company_id = Column(UUID(as_uuid=True), ForeignKey("companies.id"), nullable=False)
+    created_by_user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=True)
     status = Column(String, nullable=False, default="created")
     subtotal = Column(Numeric(12, 2), nullable=False, default=0)
     tax = Column(Numeric(12, 2), nullable=False, default=0)

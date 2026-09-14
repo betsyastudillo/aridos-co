@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from uuid import UUID
 from decimal import Decimal
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 class OrderItemCreate(BaseModel):
     material_id: UUID
@@ -21,7 +21,7 @@ class OrderItemResponse(BaseModel):
 
 
 class OrderCreate(BaseModel):
-    company_id: UUID
+    company_id: Optional[UUID]
     items: List[OrderItemCreate]
 
 
