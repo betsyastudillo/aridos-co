@@ -14,6 +14,5 @@ class OrderItem(Base):
     quantity_m3 = Column(Numeric(10, 2), nullable=False)
     unit_price = Column(Numeric(10, 2), nullable=False)
     subtotal = Column(Numeric(12, 2), nullable=False)
-    transport_cost = Column(Numeric(12, 2), nullable=True)
 
     order = relationship("Order", back_populates="items")

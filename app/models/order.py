@@ -16,5 +16,7 @@ class Order(Base):
     total = Column(Numeric(12, 2), nullable=False, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    transport_cost = Column(Numeric(12, 2), nullable=True)
+
 
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")

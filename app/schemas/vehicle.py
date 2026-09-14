@@ -2,7 +2,9 @@ from pydantic import BaseModel
 from uuid import UUID
 from decimal import Decimal
 from datetime import date
+from typing import Literal
 
+VehicleType = Literal["volqueta", "patineta", "mula"]
 
 class VehicleBase(BaseModel):
     type: str

@@ -1,0 +1,15 @@
+from sqlalchemy import Column, ForeignKey, DateTime
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
+import uuid
+from app.database import Base
+
+
+class Assignment(Base):
+    __tablename__ = "assignments"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id"), unique=True, nullable=False) #unique=True porque un pedido solo debe tener 1 asignación activa a la vez
+    vehicle_id = Column(UUID(as_uuid=True), ForeignKey("vehicles.id"), nullable=False)
+    carrier_id = Column(UUID(as_uuid=True), ForeignKey("carriers.id"), nullable=False)
+    assigned_at = Column(DateTime(timezone=True), server_default=func.now())
