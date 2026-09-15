@@ -10,11 +10,11 @@ from app.schemas.assignment import AssignmentCreate
 from app.services.transport_service import get_transport_cost
 
 
-ASSIGNABLE_ORDER_STATUSES = ["created"]  # ajustar a ["payment_confirmed"] cuando exista Payment
+ASSIGNABLE_ORDER_STATUSES = ["created"]  
 
 
 def get_assignments(db: Session,) -> list[Assignment]:
-    return db.query(Assignment).first()
+    return db.query(Assignment).all()
 
 
 def get_assignment_by_order(db: Session, order_id: UUID) -> Optional[Assignment]:
