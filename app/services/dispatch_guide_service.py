@@ -13,7 +13,13 @@ from app.models.vehicle import Vehicle
 from app.models.carrier import Carrier
 from app.config import settings
 
+
 QR_UPLOAD_DIR = "uploads/dispatch_guides"
+
+
+def get_dispatch_guides(db: Session) -> list[DispatchGuide]:
+    return db.query(DispatchGuide).all()
+
 
 def get_dispatch_guide_by_order(db: Session, order_id: UUID) -> Optional[DispatchGuide]:
     return db.query(DispatchGuide).filter(DispatchGuide.order_id == order_id).first()
@@ -59,8 +65,11 @@ def create_dispatch_guide(db: Session, order_id: UUID) -> DispatchGuide:
     if not assignment:
         raise ValueError("Order has no transport assignment yet")
 
-    plant = db.query(Company).filter(Company.type == "A").first()
+    plant = db.query(Company).filter(Company.type == "own").first()
 
+    if not plant or not plant.address:
+        raise ValueError("AridosCo company record not found. Create it first with type'own'")
+    
     destination_company = db.query(Company).filter(Company.id == order.company_id).first()
 
     # Genera un token aleatorio, largo, imposible de adivinar.
@@ -70,7 +79,7 @@ def create_dispatch_guide(db: Session, order_id: UUID) -> DispatchGuide:
         order_id=order_id,
         token=token,
         status="pending",
-        origin="Cali",
+        origin=plant.address,
         destination=destination_company.address,
         cargo_detail=build_cargo_detail(order),
     )
@@ -97,6 +106,10 @@ def verify_dispatch_guide(db: Session, token: str) -> dict:
         raise ValueError("This dispatch guide has already been used")
 
     assignment = db.query(Assignment).filter(Assignment.order_id == guide.order_id).first()
+
+    if not assignment:
+        raise ValueError("No transport assignment found for this order")
+    
     vehicle = db.query(Vehicle).filter(Vehicle.id == assignment.vehicle_id).first()
     carrier = db.query(Carrier).filter(Carrier.id == assignment.carrier_id).first()
 
