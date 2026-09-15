@@ -84,19 +84,24 @@ def update_document_status(db: Session, document_id: UUID, new_status: str) -> O
 
 def replace_document_file(db: Session, document_id: UUID, new_file: UploadFile) -> Optional[Document]:
     document = db.query(Document).filter(Document.id == document_id).first()
+    
     if not document:
         return None
     
     old_path = document.document_url.lstrip("/")
+    
     if os.path.exists(old_path):
         os.remove(old_path)
-        
-    # Guarda el nuevo archivo
-    new_file_path = save_document_file(new_file, document.company_id)
+
+    #Usa el dueño del documento, company, vehicle o carrier
+    owner_id = document.company_id or document.vehicle_id or document.carrier_id    
+    # Guarda el nuevo archivo ya con el id que se seleccionó arriba
+    new_file_path = save_document_file(new_file, owner_id) 
 
     # Actualiza el registro del documento con la nueva ruta del archivo
     document.document_url = new_file_path
     document.status = "pending"  # Reinicia el estado a "pending" 
     db.commit()
     db.refresh(document)
+    
     return document
