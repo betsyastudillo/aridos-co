@@ -1,4 +1,5 @@
-from fastapi import Depends, HTTPException, status
+import os
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -50,3 +51,12 @@ def require_role(*allowed_roles: str):
         return current_user
 
     return role_checker
+
+
+async def verify_webhook_secret(x_webhook_secret: str = Header(...)):
+    expected = os.getenv("PAYMENT_WEBHOOK_SECRET")
+    if not expected or x_webhook_secret != expected:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid webhook signature",
+        )

@@ -7,8 +7,8 @@ from app.models.payment import Payment
 from app.models.order import Order
 
 
-def get_payments(db: Session) -> Optional[Payment]:
-    return db.query(Payment).first()
+def get_payments(db: Session) -> list[Payment]:
+    return db.query(Payment).all()
 
 
 def get_payment_by_order(db: Session, order_id: UUID) -> Optional[Payment]:
